@@ -17,6 +17,7 @@
                 <a class="nav-link" href="${pageContext.request.contextPath}/agents">Home</a>
                 <a class="nav-link" href="${pageContext.request.contextPath}/agents?action=search">Search Agents</a>
                 <a class="nav-link active" href="${pageContext.request.contextPath}/agents?action=edit">Add Agent</a>
+                <a class="nav-link" href="${pageContext.request.contextPath}/auth/logout">Logout</a>
             </div>
         </div>
     </nav>

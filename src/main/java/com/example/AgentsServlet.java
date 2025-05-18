@@ -14,7 +14,6 @@ import java.io.IOException;
 public class AgentsServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Check if user is logged in
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("user") == null) {
             response.sendRedirect(request.getContextPath() + "/auth/login");
@@ -24,10 +23,18 @@ public class AgentsServlet extends HttpServlet {
         User user = (User) session.getAttribute("user");
         request.setAttribute("user", user);
         
+        // Redirect buyers and sellers to their home pages
+        if ("BUYER".equals(user.getUserType())) {
+            response.sendRedirect(request.getContextPath() + "/auth/buyer-home");
+            return;
+        } else if ("SELLER".equals(user.getUserType())) {
+            response.sendRedirect(request.getContextPath() + "/auth/seller-home");
+            return;
+        }
+        
         String action = request.getParameter("action");
         if (action == null) action = "list";
 
-        // If user is not an agent and trying to access edit page, redirect to list page
         if ("edit".equals(action) && !"AGENT".equals(user.getUserType())) {
             request.setAttribute("error", "Only agents can access this page");
             action = "list";

@@ -26,6 +26,7 @@ public class AuthServlet extends HttpServlet {
             return;
         }
         
+        HttpSession session;
         switch (pathInfo) {
             case "/login":
                 request.getRequestDispatcher("/WEB-INF/views/login.jsp").forward(request, response);
@@ -34,7 +35,7 @@ public class AuthServlet extends HttpServlet {
                 request.getRequestDispatcher("/WEB-INF/views/register.jsp").forward(request, response);
                 break;
             case "/profile":
-                HttpSession session = request.getSession(false);
+                session = request.getSession(false);
                 if (session == null || session.getAttribute("user") == null) {
                     response.sendRedirect(request.getContextPath() + "/auth/login");
                     return;
@@ -47,6 +48,22 @@ public class AuthServlet extends HttpServlet {
                     session.invalidate();
                 }
                 response.sendRedirect(request.getContextPath() + "/auth/login");
+                break;
+            case "/buyer-home":
+                session = request.getSession(false);
+                if (session == null || session.getAttribute("user") == null) {
+                    response.sendRedirect(request.getContextPath() + "/auth/login");
+                    return;
+                }
+                request.getRequestDispatcher("/WEB-INF/views/buyer-home.jsp").forward(request, response);
+                break;
+            case "/seller-home":
+                session = request.getSession(false);
+                if (session == null || session.getAttribute("user") == null) {
+                    response.sendRedirect(request.getContextPath() + "/auth/login");
+                    return;
+                }
+                request.getRequestDispatcher("/WEB-INF/views/seller-home.jsp").forward(request, response);
                 break;
             default:
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
@@ -93,6 +110,10 @@ public class AuthServlet extends HttpServlet {
             String userType = userOpt.get().getUserType();
             if ("AGENT".equals(userType)) {
                 response.sendRedirect(request.getContextPath() + "/agents?action=edit");
+            } else if ("BUYER".equals(userType)) {
+                response.sendRedirect(request.getContextPath() + "/auth/buyer-home");
+            } else if ("SELLER".equals(userType)) {
+                response.sendRedirect(request.getContextPath() + "/auth/seller-home");
             } else {
                 response.sendRedirect(request.getContextPath() + "/agents");
             }

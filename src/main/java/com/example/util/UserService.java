@@ -48,6 +48,7 @@ public class UserService {
         saveAllUsers(defaultUsers);
     }
     
+    @SuppressWarnings("unchecked")
     public List<User> getAllUsers() {
         try {
             Path path = Paths.get(USER_FILE);
@@ -55,8 +56,10 @@ public class UserService {
                 return new ArrayList<>();
             }
             
+            List<User> users;
             try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(USER_FILE))) {
-                return (List<User>) ois.readObject();
+                users = (List<User>) ois.readObject();
+                return users;
             }
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
