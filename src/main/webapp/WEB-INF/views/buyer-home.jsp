@@ -13,7 +13,7 @@
             <div class="navbar-nav">
                 <a class="nav-link" href="${pageContext.request.contextPath}/auth/profile">My Profile</a>
                 <a class="nav-link" href="${pageContext.request.contextPath}/agents?action=search">Search Agents</a>
-                <a class="nav-link" href="#">Saved Properties</a>
+                <a class="nav-link" href="${pageContext.request.contextPath}/properties">Properties</a>
                 <a class="nav-link" href="${pageContext.request.contextPath}/auth/logout">Logout</a>
             </div>
         </div>

@@ -13,13 +13,16 @@
             <div class="navbar-nav">
                 <a class="nav-link" href="${pageContext.request.contextPath}/auth/profile">My Profile</a>
                 <a class="nav-link" href="#">My Listings</a>
-                <a class="nav-link" href="#">Add Property</a>
+                <a class="nav-link" href="${pageContext.request.contextPath}/properties?action=create">Add Property</a>
                 <a class="nav-link" href="${pageContext.request.contextPath}/auth/logout">Logout</a>
             </div>
         </div>
     </nav>
     <div class="container mt-4">
         <h2>Welcome, <%= user.getName() %>!</h2>
+        <div class="mb-3">
+            <a href="${pageContext.request.contextPath}/properties?action=create" class="btn btn-primary">Add Property</a>
+        </div>
         <div class="row mt-4">
             <div class="col-md-6">
                 <div class="card mb-3">
