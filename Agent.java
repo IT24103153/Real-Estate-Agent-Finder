@@ -16,8 +16,6 @@ public class Agent extends User implements Comparable<Agent> {
 
     @Override
     public int compareTo(Agent other) {
-        // Compare agents by their average rating (higher ratings first)
-        // This is used by the BST for comparing agents
         return Double.compare(this.averageRating, other.averageRating);
     }
 }
