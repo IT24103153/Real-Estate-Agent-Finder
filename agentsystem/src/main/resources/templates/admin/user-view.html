@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout(~{::title}, ~{::main})}">
+<head>
+    <title>User Details - Real Estate Agent Finder</title>
+</head>
+<body>
+<main>
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h2>User Details</h2>
+                    <div>
+                        <a th:href="@{/admin/users}" class="btn btn-secondary">
+                            <i class="bi bi-arrow-left"></i> Back to Users
+                        </a>
+                        <a th:href="@{/admin/users/{id}/edit(id=${user.id})}" class="btn btn-warning">
+                            <i class="bi bi-pencil"></i> Edit User
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-4 fw-bold">User ID:</div>
+                        <div class="col-md-8" th:text="${user.id}">ID</div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-4 fw-bold">Name:</div>
+                        <div class="col-md-8" th:text="${user.name}">Name</div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-4 fw-bold">Email:</div>
+                        <div class="col-md-8" th:text="${user.email}">Email</div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-4 fw-bold">Phone Number:</div>
+                        <div class="col-md-8" th:text="${user.phoneNumber}">Phone</div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-4 fw-bold">Address:</div>
+                        <div class="col-md-8" th:text="${user.address}">Address</div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-4 fw-bold">Role:</div>
+                        <div class="col-md-8" th:text="${user.role.replace('ROLE_', '')}">Role</div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-4 fw-bold">Status:</div>
+                        <div class="col-md-8">
+                            <span th:if="${user.active}" class="badge bg-success">Active</span>
+                            <span th:unless="${user.active}" class="badge bg-danger">Inactive</span>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-4 fw-bold">Registration Date:</div>
+                        <div class="col-md-8" th:text="${#temporals.format(user.registrationDate, 'dd MMM yyyy')}">Date</div>
+                    </div>
+                    
+                    <div class="mt-4" th:if="${user.active}">
+                        <a th:href="@{/admin/users/{id}/delete(id=${user.id})}" class="btn btn-danger"
+                           onclick="return confirm('Are you sure you want to deactivate this user?')">
+                            <i class="bi bi-trash"></i> Deactivate User
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

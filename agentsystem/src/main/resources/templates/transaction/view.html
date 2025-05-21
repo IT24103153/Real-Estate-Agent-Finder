@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      th:replace="~{layout :: layout(~{::title}, ~{::main})}">
+<head>
+    <title>Transaction Details - Real Estate Agent Finder</title>
+</head>
+<body>
+<main>
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h2>Transaction Details</h2>
+                    <div>
+                        <a th:href="@{/transactions}" class="btn btn-secondary">
+                            <i class="bi bi-arrow-left"></i> Back to Transactions
+                        </a>
+                        <a th:href="@{/payments/{id}(id=${transaction.paymentId})}" class="btn btn-info">
+                            <i class="bi bi-credit-card"></i> View Payment
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div th:if="${param.updated}" class="alert alert-success">
+                        Transaction status has been updated successfully.
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-4 fw-bold">Transaction ID:</div>
+                        <div class="col-md-8" th:text="${transaction.id}">ID</div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-4 fw-bold">Payment ID:</div>
+                        <div class="col-md-8" th:text="${transaction.paymentId}">Payment ID</div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-4 fw-bold">Date:</div>
+                        <div class="col-md-8" th:text="${#temporals.format(transaction.transactionDate, 'dd MMM yyyy HH:mm')}">01 Jan 2025 10:00</div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-4 fw-bold">Amount:</div>
+                        <div class="col-md-8" th:text="${transaction.amount}">100.00</div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-4 fw-bold">Type:</div>
+                        <div class="col-md-8" th:text="${transaction.type}">PAYMENT</div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-4 fw-bold">Status:</div>
+                        <div class="col-md-8">
+                            <span th:if="${transaction.status == 'PENDING'}" class="badge bg-warning text-dark">Pending</span>
+                            <span th:if="${transaction.status == 'COMPLETED'}" class="badge bg-success">Completed</span>
+                            <span th:if="${transaction.status == 'FAILED'}" class="badge bg-danger">Failed</span>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3" sec:authorize="hasRole('ADMIN')">
+                        <div class="col-md-4 fw-bold">User ID:</div>
+                        <div class="col-md-8" th:text="${transaction.userId}">User ID</div>
+                    </div>
+                    
+                    <div class="row mb-3" th:if="${transaction.agentId != null}">
+                        <div class="col-md-4 fw-bold">Agent ID:</div>
+                        <div class="col-md-8" th:text="${transaction.agentId}">Agent ID</div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-4 fw-bold">Description:</div>
+                        <div class="col-md-8" th:text="${transaction.description}">Transaction description</div>
+                    </div>
+                    
+                    <div class="mt-4" th:if="${transaction.status == 'PENDING'}" sec:authorize="hasRole('ADMIN')">
+                        <a th:href="@{/transactions/{id}/status(id=${transaction.id})}" class="btn btn-warning">
+                            <i class="bi bi-pencil"></i> Update Status
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

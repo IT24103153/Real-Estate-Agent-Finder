@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      th:replace="~{layout :: layout(~{::title}, ~{::main})}">
+<head>
+    <title>Payment Details - Real Estate Agent Finder</title>
+</head>
+<body>
+<main>
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h2>Payment Details</h2>
+                    <div>
+                        <a th:href="@{/payments}" class="btn btn-secondary">
+                            <i class="bi bi-arrow-left"></i> Back to Payments
+                        </a>
+                        <a th:href="@{/transactions/payment/{id}(id=${payment.id})}" class="btn btn-info">
+                            <i class="bi bi-list-ul"></i> View Transactions
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div th:if="${param.updated}" class="alert alert-success">
+                        Payment status has been updated successfully.
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-4 fw-bold">Payment ID:</div>
+                        <div class="col-md-8" th:text="${payment.id}">ID</div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-4 fw-bold">Transaction Reference:</div>
+                        <div class="col-md-8" th:text="${payment.transactionReference}">TXN-12345678</div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-4 fw-bold">Date:</div>
+                        <div class="col-md-8" th:text="${#temporals.format(payment.paymentDate, 'dd MMM yyyy HH:mm')}">01 Jan 2025 10:00</div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-4 fw-bold">Amount:</div>
+                        <div class="col-md-8" th:text="${payment.amount + ' ' + payment.currency}">100.00 USD</div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-4 fw-bold">Payment Method:</div>
+                        <div class="col-md-8" th:text="${payment.paymentMethod}">Credit Card</div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-4 fw-bold">Status:</div>
+                        <div class="col-md-8">
+                            <span th:if="${payment.status == 'PENDING'}" class="badge bg-warning text-dark">Pending</span>
+                            <span th:if="${payment.status == 'COMPLETED'}" class="badge bg-success">Completed</span>
+                            <span th:if="${payment.status == 'FAILED'}" class="badge bg-danger">Failed</span>
+                            <span th:if="${payment.status == 'REFUNDED'}" class="badge bg-info">Refunded</span>
+                            <span th:if="${payment.status == 'CANCELLED'}" class="badge bg-secondary">Cancelled</span>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3" sec:authorize="hasRole('ADMIN')">
+                        <div class="col-md-4 fw-bold">User ID:</div>
+                        <div class="col-md-8" th:text="${payment.userId}">User ID</div>
+                    </div>
+                    
+                    <div class="row mb-3" th:if="${payment.agentId != null}">
+                        <div class="col-md-4 fw-bold">Agent ID:</div>
+                        <div class="col-md-8" th:text="${payment.agentId}">Agent ID</div>
+                    </div>
+                    
+                    <div class="row mb-3" th:if="${payment.appointmentId != null}">
+                        <div class="col-md-4 fw-bold">Appointment ID:</div>
+                        <div class="col-md-8" th:text="${payment.appointmentId}">Appointment ID</div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-4 fw-bold">Description:</div>
+                        <div class="col-md-8" th:text="${payment.description}">Payment description</div>
+                    </div>
+                    
+                    <div class="mt-4" th:if="${payment.status == 'PENDING'}" sec:authorize="hasAnyRole('ADMIN', 'AGENT')">
+                        <a th:href="@{/payments/{id}/status(id=${payment.id})}" class="btn btn-warning">
+                            <i class="bi bi-pencil"></i> Update Status
+                        </a>
+                    </div>
+                    
+                    <div class="mt-4" th:if="${payment.status == 'PENDING'}" sec:authorize="hasAnyRole('ADMIN', 'USER')">
+                        <a th:href="@{/payments/{id}/delete(id=${payment.id})}" class="btn btn-danger"
+                           onclick="return confirm('Are you sure you want to cancel this payment?')">
+                            <i class="bi bi-trash"></i> Cancel Payment
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

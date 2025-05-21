@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout(~{::title}, ~{::main})}">
+<head>
+    <title>Welcome - Real Estate Agent Finder</title>
+</head>
+<body>
+<main>
+    <div class="jumbotron">
+        <h1 class="display-4">Find Your Perfect Real Estate Agent</h1>
+        <p class="lead">Our system helps you discover top-rated real estate agents specializing in various areas.</p>
+        <hr class="my-4">
+        <p>Browse our collection of professional agents, read reviews, and book appointments with experts who can help you with your real estate needs.</p>
+        <a class="btn btn-primary btn-lg" href="/agents" role="button">Browse Agents</a>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-md-4">
+            <h2>Search Agents</h2>
+            <p>Find agents based on your specific requirements and location preferences.</p>
+        </div>
+        <div class="col-md-4">
+            <h2>Read Reviews</h2>
+            <p>Browse honest feedback from previous clients to make informed decisions.</p>
+        </div>
+        <div class="col-md-4">
+            <h2>Book Appointments</h2>
+            <p>Schedule meetings with your selected agents at your convenience.</p>
+        </div>
+    </div>
+</main>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout(~{::title}, ~{::main})}">
+<head>
+    <title>Appointments</title>
+</head>
+<body>
+<main>
+    <h2>Appointments for <span th:text="${agent.name}">Agent Name</span></h2>
+
+    <div th:if="${appointments.empty}" class="alert alert-info">
+        No appointments found.
+    </div>
+
+    <table th:if="${!appointments.empty}" class="table table-striped">
+        <thead>
+        <tr>
+            <th>Date & Time</th>
+            <th>Property Type</th>
+            <th>Location</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="appointment : ${appointments}">
+            <td th:text="${#temporals.format(appointment.dateTime, 'dd MMM yyyy HH:mm')}">01 Jan 2025 10:00</td>
+            <td th:text="${appointment.propertyType}">Residential</td>
+            <td th:text="${appointment.location}">Downtown</td>
+            <td th:text="${appointment.status}">SCHEDULED</td>
+            <td>
+                <a th:href="@{/appointments/{id}/complete(id=${appointment.id})}" class="btn btn-sm btn-success">Complete</a>
+                <a th:href="@{/appointments/{id}/cancel(id=${appointment.id})}" class="btn btn-sm btn-danger">Cancel</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <a th:href="@{/agents/{id}(id=${agent.id})}" class="btn btn-secondary">Back to Agent</a>
+</main>
+</body>
+</html>

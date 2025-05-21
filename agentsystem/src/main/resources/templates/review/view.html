@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout(~{::title}, ~{::main})}">
+<head>
+    <title>Review Details</title>
+</head>
+<body>
+<main>
+    <h2>Review Details</h2>
+
+    <div class="card mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <span>Rating: <strong th:text="${review.rating}">5</strong>/5</span>
+            <span class="text-muted" th:text="${#temporals.format(review.dateCreated, 'dd MMM yyyy HH:mm')}">01 Jan 2025 10:00</span>
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">Agent: <a th:href="@{/agents/{id}(id=${agent.id})}" th:text="${agent.name}">Agent Name</a></h5>
+            <p class="card-text" th:text="${review.comment}">Review comment text...</p>
+
+            <div class="mt-4">
+                <a th:href="@{/reviews/edit/{id}(id=${review.id})}" class="btn btn-warning">Edit Review</a>
+                <a th:href="@{/reviews/delete/{id}(id=${review.id})}" class="btn btn-danger"
+                   onclick="return confirm('Are you sure you want to delete this review?')">Delete Review</a>
+                <a th:href="@{/agents/{id}(id=${agent.id})}" class="btn btn-primary">View Agent Profile</a>
+            </div>
+        </div>
+    </div>
+
+    <a href="/reviews" class="btn btn-secondary">Back to All Reviews</a>
+</main>
+</body>
+</html>

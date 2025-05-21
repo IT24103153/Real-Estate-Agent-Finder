@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      th:replace="~{layout :: layout(~{::title}, ~{::main})}">
+<head>
+    <title>Payments - Real Estate Agent Finder</title>
+</head>
+<body>
+<main>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Payments</h2>
+        <a th:href="@{/payments/new}" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> New Payment
+        </a>
+    </div>
+    
+    <div th:if="${param.error}" class="alert alert-danger" th:text="${param.error}">
+        Error message
+    </div>
+    
+    <div th:if="${param.deleted}" class="alert alert-success">
+        Payment has been cancelled successfully.
+    </div>
+    
+    <div th:if="${payments.empty}" class="alert alert-info">
+        No payments found.
+    </div>
+    
+    <div th:unless="${payments.empty}" class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Date</th>
+                    <th sec:authorize="hasRole('ADMIN')">User</th>
+                    <th sec:authorize="hasAnyRole('ADMIN', 'USER')">Agent</th>
+                    <th>Amount</th>
+                    <th>Method</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="payment : ${payments}">
+                    <td th:text="${payment.id.substring(0, 8)}">ID</td>
+                    <td th:text="${#temporals.format(payment.paymentDate, 'dd MMM yyyy')}">Date</td>
+                    <td sec:authorize="hasRole('ADMIN')" th:text="${payment.userId}">User</td>
+                    <td sec:authorize="hasAnyRole('ADMIN', 'USER')" th:text="${payment.agentId}">Agent</td>
+                    <td th:text="${payment.amount + ' ' + payment.currency}">Amount</td>
+                    <td th:text="${payment.paymentMethod}">Method</td>
+                    <td>
+                        <span th:if="${payment.status == 'PENDING'}" class="badge bg-warning text-dark">Pending</span>
+                        <span th:if="${payment.status == 'COMPLETED'}" class="badge bg-success">Completed</span>
+                        <span th:if="${payment.status == 'FAILED'}" class="badge bg-danger">Failed</span>
+                        <span th:if="${payment.status == 'REFUNDED'}" class="badge bg-info">Refunded</span>
+                        <span th:if="${payment.status == 'CANCELLED'}" class="badge bg-secondary">Cancelled</span>
+                    </td>
+                    <td>
+                        <div class="btn-group">
+                            <a th:href="@{/payments/{id}(id=${payment.id})}" class="btn btn-sm btn-info">
+                                <i class="bi bi-eye"></i>
+                            </a>
+                            <a th:if="${payment.status == 'PENDING'}" sec:authorize="hasAnyRole('ADMIN', 'AGENT')" 
+                               th:href="@{/payments/{id}/status(id=${payment.id})}" class="btn btn-sm btn-warning">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            <a th:if="${payment.status == 'PENDING'}" sec:authorize="hasAnyRole('ADMIN', 'USER')" 
+                               th:href="@{/payments/{id}/delete(id=${payment.id})}" class="btn btn-sm btn-danger"
+                               onclick="return confirm('Are you sure you want to cancel this payment?')">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                            <a th:href="@{/transactions/payment/{id}(id=${payment.id})}" class="btn btn-sm btn-secondary">
+                                <i class="bi bi-list-ul"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+</body>
+</html>

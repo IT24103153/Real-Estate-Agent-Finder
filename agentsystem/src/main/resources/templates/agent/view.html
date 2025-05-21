@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout(~{::title}, ~{::main})}">
+<head>
+    <title th:text="${agent.name} + ' - Agent Details'">Agent Details</title>
+</head>
+<body>
+<main>
+    <div class="row">
+        <div class="col-md-8">
+            <h2 th:text="${agent.name}">Agent Name</h2>
+            <p class="lead" th:text="${agent.specialization}">Specialization</p>
+
+            <div class="card mb-4">
+                <div class="card-header">
+                    Agent Information
+                </div>
+                <div class="card-body">
+                    <p><strong>Email:</strong> <span th:text="${agent.email}">email@example.com</span></p>
+                    <p><strong>Phone:</strong> <span th:text="${agent.phoneNumber}">123-456-7890</span></p>
+                    <p><strong>Experience:</strong> <span th:text="${agent.experience}">10 years</span></p>
+                    <p><strong>Location:</strong> <span th:text="${agent.location}">Downtown</span></p>
+                    <p><strong>Rating:</strong> <span th:text="${#numbers.formatDecimal(agent.averageRating, 1, 1)}">4.5</span>/5</p>
+                </div>
+            </div>
+
+            <h3>Reviews</h3>
+            <div th:if="${agent.reviews.empty}" class="alert alert-info">
+                No reviews yet for this agent.
+            </div>
+
+            <!-- In the reviews section of agent/view.html -->
+            <div th:each="review : ${agent.reviews}" class="card mb-3">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h5 class="card-title mb-0">Rating: <span th:text="${review.rating}">5</span>/5</h5>
+                        <div>
+                            <a th:href="@{/reviews/edit/{id}(id=${review.id})}" class="btn btn-warning btn-sm">Edit</a>
+                            <a th:href="@{/reviews/delete/{id}(id=${review.id})}" class="btn btn-danger btn-sm"
+                               onclick="return confirm('Are you sure you want to delete this review?')">Delete</a>
+                        </div>
+                    </div>
+                    <p class="card-text" th:text="${review.comment}">Review comment</p>
+                    <p class="card-text"><small class="text-muted" th:text="${#temporals.format(review.dateCreated, 'dd MMM yyyy')}">01 Jan 2025</small></p>
+                </div>
+            </div>
+
+            <h4 class="mt-4">Add a Review</h4>
+            <form th:action="@{/agents/{id}/review(id=${agent.id})}" method="post">
+                <div class="mb-3">
+                    <label for="rating" class="form-label">Rating</label>
+                    <select class="form-select" id="rating" name="rating" required>
+                        <option value="5">5 - Excellent</option>
+                        <option value="4">4 - Very Good</option>
+                        <option value="3">3 - Good</option>
+                        <option value="2">2 - Fair</option>
+                        <option value="1">1 - Poor</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="comment" class="form-label">Comment</label>
+                    <textarea class="form-control" id="comment" name="comment" rows="3" required></textarea>
+                </div>
+                <input type="hidden" name="userId" value="user123">
+                <button type="submit" class="btn btn-primary">Submit Review</button>
+            </form>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-header">
+                    Book an Appointment
+                </div>
+                <div class="card-body">
+                    <form th:action="@{/agents/{id}/book(id=${agent.id})}" method="post">
+                        <div class="mb-3">
+                            <label for="dateTime" class="form-label">Date and Time</label>
+                            <input type="datetime-local" class="form-control" id="dateTime" name="dateTime" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="propertyType" class="form-label">Property Type</label>
+                            <select class="form-select" id="propertyType" name="propertyType" required>
+                                <option value="Residential">Residential</option>
+                                <option value="Commercial">Commercial</option>
+                                <option value="Industrial">Industrial</option>
+                                <option value="Land">Land</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="location" class="form-label">Location</label>
+                            <input type="text" class="form-control" id="location" name="location" required>
+                        </div>
+                        <input type="hidden" name="userId" value="user123">
+                        <button type="submit" class="btn btn-primary">Book Appointment</button>
+                    </form>
+                </div>
+            </div>
+
+            <a th:href="@{/agents/{id}/appointments(id=${agent.id})}" class="btn btn-secondary mb-3">View Appointments</a>
+            <a th:href="@{/agents/{id}/edit(id=${agent.id})}" class="btn btn-warning mb-3">Edit Agent</a>
+            <a href="/agents" class="btn btn-outline-secondary">Back to Agents</a>
+        </div>
+    </div>
+</main>
+</body>
+</html>

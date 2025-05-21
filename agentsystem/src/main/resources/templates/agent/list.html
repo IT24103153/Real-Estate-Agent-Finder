@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout(~{::title}, ~{::main})}">
+<head>
+    <title>Real Estate Agents</title>
+</head>
+<body>
+<main>
+    <h2>Real Estate Agents</h2>
+    <div class="mb-3">
+        <a href="/agents/new" class="btn btn-primary">Add New Agent</a>
+        <a href="/agents/sorted" class="btn btn-secondary">Sort by Rating</a>
+    </div>
+
+    <div class="row">
+        <div th:each="agent : ${agents}" class="col-md-4">
+            <div class="card agent-card">
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${agent.name}">Agent Name</h5>
+                    <h6 class="card-subtitle mb-2 text-muted" th:text="${agent.specialization}">Specialization</h6>
+                    <p class="card-text">
+                        <strong>Rating:</strong> <span th:text="${#numbers.formatDecimal(agent.averageRating, 1, 1)}">4.5</span>/5
+                    </p>
+                    <p class="card-text" th:text="${agent.experience}">Experience</p>
+                    <p class="card-text" th:text="${agent.location}">Location</p>
+                    <a th:href="@{/agents/{id}(id=${agent.id})}" class="btn btn-info">View Details</a>
+                    <a th:href="@{/agents/{id}/book(id=${agent.id})}" class="btn btn-success">Book Appointment</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

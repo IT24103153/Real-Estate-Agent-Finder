@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      th:replace="~{layout :: layout(~{::title}, ~{::main})}">
+<head>
+    <title>Payment Transactions - Real Estate Agent Finder</title>
+</head>
+<body>
+<main>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Payment Transactions</h2>
+        <a th:href="@{/payments/{id}(id=${paymentId})}" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Back to Payment
+        </a>
+    </div>
+    
+    <div th:if="${transactions.empty}" class="alert alert-info">
+        No transactions found for this payment.
+    </div>
+    
+    <div th:unless="${transactions.empty}" class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Date</th>
+                    <th>Amount</th>
+                    <th>Type</th>
+                    <th>Status</th>
+                    <th>Description</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="transaction : ${transactions}">
+                    <td th:text="${transaction.id.substring(0, 8)}">ID</td>
+                    <td th:text="${#temporals.format(transaction.transactionDate, 'dd MMM yyyy')}">Date</td>
+                    <td th:text="${transaction.amount}">Amount</td>
+                    <td th:text="${transaction.type}">Type</td>
+                    <td>
+                        <span th:if="${transaction.status == 'PENDING'}" class="badge bg-warning text-dark">Pending</span>
+                        <span th:if="${transaction.status == 'COMPLETED'}" class="badge bg-success">Completed</span>
+                        <span th:if="${transaction.status == 'FAILED'}" class="badge bg-danger">Failed</span>
+                    </td>
+                    <td th:text="${transaction.description}">Description</td>
+                    <td>
+                        <a th:href="@{/transactions/{id}(id=${transaction.id})}" class="btn btn-sm btn-info">
+                            <i class="bi bi-eye"></i> View
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+</body>
+</html>

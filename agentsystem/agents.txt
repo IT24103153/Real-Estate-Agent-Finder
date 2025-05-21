@@ -1,0 +1,2 @@
+b64c85a9-a15e-4d51-83c3-f812eb429328|John Doe|john.doe@example.com|123-456-7890|Residential|10 years|Downtown|4.500000
+d9bf2a0b-f942-419f-b398-35fe47a92142|Jane Smith|jane.smith@example.com|987-654-3210|Commercial|15 years|Uptown|4.800000

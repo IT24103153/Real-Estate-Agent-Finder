@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout(~{::title}, ~{::main})}">
+<head>
+    <title>Edit Review</title>
+</head>
+<body>
+<main>
+    <h2>Edit Review for <span th:text="${agent.name}">Agent Name</span></h2>
+
+    <form th:action="@{/reviews/update}" method="post" th:object="${review}">
+        <input type="hidden" th:field="*{id}">
+        <input type="hidden" th:field="*{agentId}">
+        <input type="hidden" th:field="*{userId}">
+        <input type="hidden" th:field="*{dateCreated}">
+
+        <div class="mb-3">
+            <label for="rating" class="form-label">Rating</label>
+            <select class="form-select" id="rating" th:field="*{rating}" required>
+                <option value="5">5 - Excellent</option>
+                <option value="4">4 - Very Good</option>
+                <option value="3">3 - Good</option>
+                <option value="2">2 - Fair</option>
+                <option value="1">1 - Poor</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="comment" class="form-label">Comment</label>
+            <textarea class="form-control" id="comment" th:field="*{comment}" rows="5" required></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Update Review</button>
+        <a th:href="@{/agents/{id}(id=${agent.id})}" class="btn btn-secondary">Cancel</a>
+    </form>
+</main>
+</body>
+</html>

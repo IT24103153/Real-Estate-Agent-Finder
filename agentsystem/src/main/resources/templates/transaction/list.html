@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      th:replace="~{layout :: layout(~{::title}, ~{::main})}">
+<head>
+    <title>Transactions - Real Estate Agent Finder</title>
+</head>
+<body>
+<main>
+    <h2>Transactions</h2>
+    
+    <div th:if="${param.error}" class="alert alert-danger" th:text="${param.error}">
+        Error message
+    </div>
+    
+    <div th:if="${transactions.empty}" class="alert alert-info">
+        No transactions found.
+    </div>
+    
+    <div th:unless="${transactions.empty}" class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Date</th>
+                    <th>Payment ID</th>
+                    <th sec:authorize="hasRole('ADMIN')">User</th>
+                    <th sec:authorize="hasAnyRole('ADMIN', 'USER')">Agent</th>
+                    <th>Amount</th>
+                    <th>Type</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="transaction : ${transactions}">
+                    <td th:text="${transaction.id.substring(0, 8)}">ID</td>
+                    <td th:text="${#temporals.format(transaction.transactionDate, 'dd MMM yyyy')}">Date</td>
+                    <td th:text="${transaction.paymentId.substring(0, 8)}">Payment ID</td>
+                    <td sec:authorize="hasRole('ADMIN')" th:text="${transaction.userId}">User</td>
+                    <td sec:authorize="hasAnyRole('ADMIN', 'USER')" th:text="${transaction.agentId}">Agent</td>
+                    <td th:text="${transaction.amount}">Amount</td>
+                    <td th:text="${transaction.type}">Type</td>
+                    <td>
+                        <span th:if="${transaction.status == 'PENDING'}" class="badge bg-warning text-dark">Pending</span>
+                        <span th:if="${transaction.status == 'COMPLETED'}" class="badge bg-success">Completed</span>
+                        <span th:if="${transaction.status == 'FAILED'}" class="badge bg-danger">Failed</span>
+                    </td>
+                    <td>
+                        <div class="btn-group">
+                            <a th:href="@{/transactions/{id}(id=${transaction.id})}" class="btn btn-sm btn-info">
+                                <i class="bi bi-eye"></i>
+                            </a>
+                            <a th:if="${transaction.status == 'PENDING'}" sec:authorize="hasRole('ADMIN')" 
+                               th:href="@{/transactions/{id}/status(id=${transaction.id})}" class="btn btn-sm btn-warning">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+</body>
+</html>
