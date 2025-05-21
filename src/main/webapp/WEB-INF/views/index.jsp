@@ -17,6 +17,8 @@
                 <a class="nav-link" href="${pageContext.request.contextPath}/agents">Home</a>
                 <a class="nav-link" href="${pageContext.request.contextPath}/agents?action=search">Search Agents</a>
                 <a class="nav-link" href="${pageContext.request.contextPath}/agents?action=edit">Add Agent</a>
+                <a class="nav-link" href="${pageContext.request.contextPath}/properties">Properties</a>
+                <a class="nav-link" href="${pageContext.request.contextPath}/auth/logout">Logout</a>
             </div>
         </div>
     </nav>
@@ -25,6 +27,7 @@
         <h1>Real Estate Agents</h1>
         <div class="mb-3">
             <a href="${pageContext.request.contextPath}/agents?action=sort" class="btn btn-primary">Sort by Rating</a>
+            <a href="${pageContext.request.contextPath}/properties?action=create" class="btn btn-success ms-2">Add Property</a>
         </div>
         <table class="table table-striped">
             <thead>
